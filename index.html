@@ -4,8 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Moodtracker</title>
-  <script type="module" src="app.js"></script>
   <link rel="stylesheet" href="style.css" />
+
+  <!-- ✅ Firebase via CDN -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body>
   <h1>Moodtracker</h1>
@@ -27,5 +30,51 @@
     </div>
     <button id="save-btn">Speichern</button>
   </div>
+
+  <!-- ✅ Dein Firebase-Code ohne "import", funktioniert im Browser -->
+  <script>
+    // 🔧 Firebase-Konfiguration
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0SKkvPn9GZjuu4fvayD6ThwN0MlmDArg",
+      authDomain: "moodtrackerfinal.firebaseapp.com",
+      projectId: "moodtrackerfinal",
+      storageBucket: "moodtrackerfinal.appspot.com",
+      messagingSenderId: "928967947635",
+      appId: "1:928967947635:web:890bda1bf805e86d4e4106",
+      measurementId: "G-JZ20PWKML3"
+    };
+
+    // 🔥 Firebase initialisieren
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    // 💻 DOM-Elemente
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const tracker = document.getElementById("tracker");
+    const username = document.getElementById("username");
+
+    loginBtn.addEventListener("click", () => {
+      auth.signInWithPopup(provider).catch(console.error);
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      auth.signOut().catch(console.error);
+    });
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        username.textContent = `Angemeldet als: ${user.displayName}`;
+        tracker.style.display = "block";
+        logoutBtn.style.display = "inline-block";
+        loginBtn.style.display = "none";
+      } else {
+        tracker.style.display = "none";
+        logoutBtn.style.display = "none";
+        loginBtn.style.display = "inline-block";
+      }
+    });
+  </script>
 </body>
 </html>
