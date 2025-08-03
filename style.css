@@ -32,3 +32,31 @@ border: 1px solid #aaa;
 cursor: pointer; /* zeigt an, dass es klickbar ist */
 
 }
+
+/* Der Farbauswahl-Container (Popup) */
+#color-picker {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%); /* horizontal zentriert */
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 8px;
+  display: flex; /* Buttons nebeneinander */
+  gap: 6px;
+  z-index: 1000; /* im Vordergrund */
+}
+
+/* Standardmäßig ist der Picker versteckt */
+#color-picker.hidden {
+  display: none;
+}
+
+/* Styling der Farb-Buttons */
+#color-picker button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}

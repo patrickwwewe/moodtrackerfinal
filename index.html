@@ -22,7 +22,7 @@
   <button data-color="#9D4EDD" style="background-color: #9D4EDD;"></button>
 </div
 
-  <!-- ✅ Dein Firebase-Code ohne "import", funktioniert im Browser -->
+  <!--  Dein Firebase-Code ohne "import", funktioniert im Browser -->
   <script>
     // 🔧 Firebase-Konfiguration
     const firebaseConfig = {
@@ -65,7 +65,100 @@
         logoutBtn.style.display = "none";
         loginBtn.style.display = "inline-block";
       }
+
+      // Zugriff auf das HTML-Element, in das wir das Kalender-Raster zeichnen
+const calendarEl = document.getElementById("calendar");
+
+// Farbauswahl-Element (Popup unten am Bildschirm)
+const colorPicker = document.getElementById("color-picker");
+
+// Zwischenspeicher für das aktuell geklickte Datum
+let selectedDate = null;
+
+// Anzahl der Tage pro Monat (für 2025 → Schaltjahr)
+const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+// Für die Anzeige über jedem Monat
+const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+
+/**
+ * Funktion erstellt das ganze Kalender-Raster:
+ *  → 12 Spalten für Monate
+ *  → für jeden Monat entsprechende Tageskästchen
+ */
+function renderCalendar() {
+  for (let month = 0; month < 12; month++) {
+    // Neue Spalte (div) für den Monat
+    const column = document.createElement("div");
+    column.className = "month-column";
+
+    // Monatstitel hinzufügen
+    const label = document.createElement("div");
+    label.textContent = monthNames[month];
+    label.style.textAlign = "center";
+    label.style.fontWeight = "bold";
+    column.appendChild(label); // z. B. "Jän"
+
+    // Für jeden Tag im aktuellen Monat
+    for (let day = 1; day <= daysPerMonth[month]; day++) {
+      const cell = document.createElement("div");
+      cell.className = "day-cell";
+
+      // Format YYYY-MM-DD – brauchen wir später für Firestore oder Speicherung
+      const dateString = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      cell.dataset.date = dateString; // z. B. data-date="2025-02-01"
+
+      // Wenn auf das Kästchen geklickt wird, wird die Farbauswahl angezeigt
+      cell.addEventListener("click", () => {
+        selectedDate = dateString;     // aktuell ausgewählter Tag merken
+        showColorPicker(cell);         // Popup über dem Feld anzeigen
+      });
+
+      column.appendChild(cell); // Tag zur Spalte hinzufügen
+    }
+
+    calendarEl.appendChild(column); // Monat zur Kalenderübersicht hinzufügen
+  }
+}
+
+/**
+ * Zeigt die Farbauswahl direkt über dem geklickten Feld
+ */
+function showColorPicker(targetCell) {
+  colorPicker.classList.remove("hidden"); // Picker anzeigen
+
+  // Positionieren – orientiert sich an der Klickposition
+  const rect = targetCell.getBoundingClientRect();
+  colorPicker.style.top = `${rect.top + window.scrollY - 40}px`; // etwas oberhalb
+  colorPicker.style.left = `${rect.left + rect.width / 2}px`;
+}
+
+/**
+ * Wenn eine Farbe im Picker geklickt wird, färben wir das passende Kästchen
+ */
+colorPicker.addEventListener("click", (e) => {
+  // Hat der geklickte Button eine Datenfarbe?
+  if (e.target.dataset.color && selectedDate) {
+    const color = e.target.dataset.color;
+
+    // Suche das richtige Feld mit dem gespeicherten Datum
+    const targetCell = document.querySelector(`[data-date="${selectedDate}"]`);
+    if (targetCell) {
+      targetCell.style.backgroundColor = color; // Färbe das Feld
+    }
+
+    // (Später: Speichern in Firestore)
+
+    // Picker ausblenden und Datum zurücksetzen
+    colorPicker.classList.add("hidden");
+    selectedDate = null;
+  }
+});
+
+// Starte den Kalenderaufbau direkt nach dem Laden
+renderCalendar();
     });
+
   </script>
 </body>
 </html>
