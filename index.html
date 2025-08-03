@@ -9,6 +9,7 @@
   <!-- ✅ Firebase via CDN -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <h1>Moodtracker – Farbkalender</h1>
@@ -78,6 +79,50 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const provider = new firebase.auth.GoogleAuthProvider();
+    const db = firebase.firestore();  // Firestore initialisieren
+
+    // Funktion zum Speichern einer Stimmung
+    async function saveMood(date, color) {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        await db.collection('moods')
+          .doc(user.uid)
+          .collection('dates')
+          .doc(date)
+          .set({
+            color: color,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+      } catch (error) {
+        console.error("Fehler beim Speichern:", error);
+      }
+    }
+
+    // Funktion zum Laden aller Stimmungen
+    async function loadMoods() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        const snapshot = await db.collection('moods')
+          .doc(user.uid)
+          .collection('dates')
+          .get();
+
+        snapshot.forEach(doc => {
+          const date = doc.id;
+          const color = doc.data().color;
+          const cell = document.querySelector(`[data-date="${date}"]`);
+          if (cell) {
+            cell.style.backgroundColor = color;
+          }
+        });
+      } catch (error) {
+        console.error("Fehler beim Laden:", error);
+      }
+    }
 
     // 💻 DOM-Elemente
     const loginBtn = document.getElementById("login-btn");
@@ -100,6 +145,10 @@
         calendar.style.display = "grid";  // Kalender anzeigen
         logoutBtn.style.display = "inline-block";
         loginBtn.style.display = "none";
+        // Erst Kalender neu erstellen
+        renderCalendar();
+        // Dann gespeicherte Stimmungen laden
+        loadMoods();
       } else {
         username.textContent = "";
         tracker.style.display = "none";
@@ -201,9 +250,9 @@ colorPicker.addEventListener("click", (e) => {
     const targetCell = document.querySelector(`[data-date="${selectedDate}"]`);
     if (targetCell) {
       targetCell.style.backgroundColor = color; // Färbe das Feld
+      // In Firestore speichern
+      saveMood(selectedDate, color);
     }
-
-    // (Später: Speichern in Firestore)
 
     // Picker ausblenden und Datum zurücksetzen
     colorPicker.classList.add("hidden");
@@ -211,8 +260,6 @@ colorPicker.addEventListener("click", (e) => {
   }
 });
 
-// Starte den Kalenderaufbau direkt nach dem Laden
-renderCalendar();
     });
 
   </script>
