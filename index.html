@@ -93,6 +93,8 @@
       auth.signOut().catch(console.error);
     });
 
+    // Zugriff auf das HTML-Element, in das wir das Kalender-Raster zeichnen
+    // (jetzt global definiert)
     auth.onAuthStateChanged(user => {
       if (user) {
         username.textContent = `Angemeldet als: ${user.displayName}`;
@@ -106,21 +108,7 @@
         loginBtn.style.display = "inline-block";
         calendarEl.innerHTML = ""; // Kalender ausblenden!
       }
-
-      // Zugriff auf das HTML-Element, in das wir das Kalender-Raster zeichnen
-const calendarEl = document.getElementById("calendar");
-
-// Farbauswahl-Element (Popup unten am Bildschirm)
-const colorPicker = document.getElementById("color-picker");
-
-// Zwischenspeicher für das aktuell geklickte Datum
-let selectedDate = null;
-
-// Anzahl der Tage pro Monat (für 2025 → Schaltjahr)
-const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-// Für die Anzeige über jedem Monat
-const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+    });
 
 /**
  * Funktion erstellt das ganze Kalender-Raster:
@@ -204,8 +192,8 @@ colorPicker.addEventListener("click", (e) => {
 });
 
 // Starte den Kalenderaufbau direkt nach dem Laden (oben wird es ja abgerufen)
-renderCalendar();
 
+    });
 
   </script>
 </body>
