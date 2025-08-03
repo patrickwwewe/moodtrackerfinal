@@ -25,8 +25,8 @@
 Monatspalte(n)*/
 .day-cell 
 {
-width: 100%; /*Füllt die ganze Spalte aus*/
-aspect-ratio: 1 / 1; /* Immer quadratisch */
+width: 24 zpx; 
+height: 24px; 
 background-color: #eee;
 border: 1px solid #aaa;
 cursor: pointer; /* zeigt an, dass es klickbar ist */
@@ -59,27 +59,4 @@ cursor: pointer; /* zeigt an, dass es klickbar ist */
   border: none;
   cursor: pointer;
   border-radius: 4px;
-}
-
-/* --- Mobile-Optimierung für Moodtracker --- */
-
-/* 
-  Dieser Media Query sorgt dafür, dass das Layout ab einer Bildschirmbreite von 700px oder weniger
-  von "nebeneinander" (flex-row) auf "untereinander" (flex-column) umgestellt wird.
-  So passt alles auf kleine Bildschirme und es gibt kein horizontales Scrollen.
-*/
-@media (max-width: 700px) {
-  body > div[style*="display: flex"] {
-    flex-direction: column !important;
-    gap: 16px !important;
-    align-items: stretch !important;
-  }
-  #legend-panel {
-    min-width: 0 !important;
-    width: 100% !important;
-    margin-top: 16px;
-  }
-  #calendar {
-    margin-top: 8px;
-  }
 }

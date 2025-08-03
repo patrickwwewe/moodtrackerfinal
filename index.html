@@ -93,32 +93,22 @@
       auth.signOut().catch(console.error);
     });
 
+    // Zugriff auf das HTML-Element, in das wir das Kalender-Raster zeichnen
+    // (jetzt global definiert)
     auth.onAuthStateChanged(user => {
       if (user) {
         username.textContent = `Angemeldet als: ${user.displayName}`;
         tracker.style.display = "block";
         logoutBtn.style.display = "inline-block";
         loginBtn.style.display = "none";
+        renderCalendar(); // Kalender anzeigen
       } else {
         tracker.style.display = "none";
         logoutBtn.style.display = "none";
         loginBtn.style.display = "inline-block";
+        calendarEl.innerHTML = ""; // Kalender ausblenden!
       }
-
-      // Zugriff auf das HTML-Element, in das wir das Kalender-Raster zeichnen
-const calendarEl = document.getElementById("calendar");
-
-// Farbauswahl-Element (Popup unten am Bildschirm)
-const colorPicker = document.getElementById("color-picker");
-
-// Zwischenspeicher für das aktuell geklickte Datum
-let selectedDate = null;
-
-// Anzahl der Tage pro Monat (für 2025 → Schaltjahr)
-const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-// Für die Anzeige über jedem Monat
-const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+    });
 
 /**
  * Funktion erstellt das ganze Kalender-Raster:
@@ -126,40 +116,46 @@ const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Se
  *  → für jeden Monat entsprechende Tageskästchen
  */
 function renderCalendar() {
-  calendarEl.innerHTML = ""; // Kalender leeren, bevor er neu erstellt wird (ansonsten dupliziert sich der Inhalt (grid))
+  // Wochentags-Abkürzungen
+  const weekdayNames = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+  calendarEl.innerHTML = "";
   for (let month = 0; month < 12; month++) {
-    // Neue Spalte (div) für den Monat
     const column = document.createElement("div");
     column.className = "month-column";
 
-    // Monatstitel hinzufügen
     const label = document.createElement("div");
     label.textContent = monthNames[month];
     label.style.textAlign = "center";
     label.style.fontWeight = "bold";
-    column.appendChild(label); // z. B. "Jän"
+    column.appendChild(label);
 
-    // Für jeden Tag im aktuellen Monat
     for (let day = 1; day <= daysPerMonth[month]; day++) {
       const cell = document.createElement("div");
       cell.className = "day-cell";
 
-      // Format YYYY-MM-DD – brauchen wir später für Firestore oder Speicherung
+      // Datum als String
       const dateString = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      cell.dataset.date = dateString; // z. B. data-date="2025-02-01"
+      cell.dataset.date = dateString;
 
-      // Wenn auf das Kästchen geklickt wird, wird die Farbauswahl angezeigt
+      // Wochentag berechnen
+      const dateObj = new Date(`2025-${month + 1}-${day}`);
+      const weekday = weekdayNames[dateObj.getDay()];
+
+      // Inhalt: Tageszahl + Wochentag
+      cell.innerHTML = `<div style="font-size:0.9em;">${day}<br>${weekday}</div>`;
+
       cell.addEventListener("click", () => {
-        selectedDate = dateString;     // aktuell ausgewählter Tag merken
-        showColorPicker(cell);         // Popup über dem Feld anzeigen
+        selectedDate = dateString;
+        showColorPicker(cell);
       });
 
-      column.appendChild(cell); // Tag zur Spalte hinzufügen
+      column.appendChild(cell);
     }
 
-    calendarEl.appendChild(column); // Monat zur Kalenderübersicht hinzufügen
+    calendarEl.appendChild(column);
   }
 }
+
 
 /**
  * Zeigt die Farbauswahl direkt über dem geklickten Feld
@@ -195,10 +191,7 @@ colorPicker.addEventListener("click", (e) => {
   }
 });
 
-// Starte den Kalenderaufbau direkt nach dem Laden
-renderCalendar();
-    });
-
-  </script>
+// ...existing code...
+</script>
 </body>
 </html>
