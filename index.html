@@ -64,6 +64,8 @@
 
 
   <script>
+    // Warte bis das DOM geladen ist
+    document.addEventListener('DOMContentLoaded', function() {
     // 🔧 Firebase-Konfiguration
     const firebaseConfig = {
       apiKey: "AIzaSyC0SKkvPn9GZjuu4fvayD6ThwN0MlmDArg",
@@ -139,10 +141,16 @@
     });
 
     auth.onAuthStateChanged(user => {
+      // Stelle sicher, dass DOM-Elemente initialisiert sind
+      if (!initializeElements()) {
+        console.error("Konnte DOM-Elemente nicht initialisieren");
+        return;
+      }
+
       if (user) {
         username.textContent = `Angemeldet als: ${user.displayName}`;
         tracker.style.display = "block";
-        calendar.style.display = "grid";  // Kalender anzeigen
+        calendarEl.style.display = "grid";  // Kalender anzeigen
         logoutBtn.style.display = "inline-block";
         loginBtn.style.display = "none";
         // Erst Kalender neu erstellen
@@ -152,28 +160,31 @@
       } else {
         username.textContent = "";
         tracker.style.display = "none";
-        calendar.style.display = "none";  // Kalender ausblenden
+        calendarEl.style.display = "none";  // Kalender ausblenden
         logoutBtn.style.display = "none";
         loginBtn.style.display = "inline-block";
       }
 
-      // Zugriff auf das HTML-Element, in das wir das Kalender-Raster zeichnen
-const calendarEl = document.getElementById("calendar");
+      // Konstanten für den Kalender
+const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+const weekDays = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
-// Farbauswahl-Element (Popup unten am Bildschirm)
-const colorPicker = document.getElementById("color-picker");
-
-// Zwischenspeicher für das aktuell geklickte Datum
+// Globale Variablen
+let calendarEl;
+let colorPicker;
 let selectedDate = null;
 
-// Anzahl der Tage pro Monat (für 2025 → Schaltjahr)
-const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-// Für die Anzeige über jedem Monat
-const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
-
-//Anteige Array der Wochentagen
-const weekDays = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+// Funktion zur Initialisierung der DOM-Elemente
+function initializeElements() {
+  calendarEl = document.getElementById("calendar");
+  colorPicker = document.getElementById("color-picker");
+  if (!calendarEl || !colorPicker) {
+    console.error("Erforderliche DOM-Elemente nicht gefunden");
+    return false;
+  }
+  return true;
+}
 /**
  * Funktion erstellt das ganze Kalender-Raster:
  *  → 12 Spalten für Monate
@@ -261,6 +272,7 @@ colorPicker.addEventListener("click", (e) => {
 });
 
     });
+    }); // Ende des DOMContentLoaded Event Listeners
 
   </script>
 </body>
