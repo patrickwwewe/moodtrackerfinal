@@ -12,22 +12,54 @@
 </head>
 <body>
   <h1>Moodtracker – Farbkalender</h1>
-  <div>
-  <span id="username"></span>
-  <button id="login-btn">Login mit Google</button>
-  <button id="logout-btn" style="display:none;">Logout</button>
-</div>
-<div id="tracker" style="display:none;"></div>
-  
-<div id="calendar"></div>
-
-<div id="color-picker" class="hidden">
-  <button data-color="#FF6B6B" style="background-color: #FF6B6B;"></button>
-  <button data-color="#FFD93D" style="background-color: #FFD93D;"></button>
-  <button data-color="#6BCB77" style="background-color: #6BCB77;"></button>
-  <button data-color="#4D96FF" style="background-color: #4D96FF;"></button>
-  <button data-color="#9D4EDD" style="background-color: #9D4EDD;"></button>
-</div>
+  <div style="display: flex; align-items: flex-start; gap: 32px; max-width: 100vw;">
+    <div style="flex: 1; min-width: 0;">
+      <div>
+        <span id="username"></span>
+        <button id="login-btn">Login mit Google</button>
+        <button id="logout-btn" style="display:none;">Logout</button>
+      </div>
+      <div id="tracker" style="display:none;"></div>
+      <div id="calendar"></div>
+    </div>
+    <div id="legend-panel" style="min-width: 120px;">
+      <h3>Stimmungsfarben</h3>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.5em;">😢</span>
+          <span style="width: 24px; height: 24px; background: #FF6B6B; border-radius: 4px; border: 1px solid #aaa; display: inline-block;"></span>
+          <span>Traurig</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.5em;">😐</span>
+          <span style="width: 24px; height: 24px; background: #FFD93D; border-radius: 4px; border: 1px solid #aaa; display: inline-block;"></span>
+          <span>Neutral</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.5em;">😊</span>
+          <span style="width: 24px; height: 24px; background: #6BCB77; border-radius: 4px; border: 1px solid #aaa; display: inline-block;"></span>
+          <span>Gut</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.5em;">😁</span>
+          <span style="width: 24px; height: 24px; background: #4D96FF; border-radius: 4px; border: 1px solid #aaa; display: inline-block;"></span>
+          <span>Sehr gut</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.5em;">🤩</span>
+          <span style="width: 24px; height: 24px; background: #9D4EDD; border-radius: 4px; border: 1px solid #aaa; display: inline-block;"></span>
+          <span>Super</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="color-picker" class="hidden">
+    <button data-color="#FF6B6B" style="background-color: #FF6B6B;"></button>
+    <button data-color="#FFD93D" style="background-color: #FFD93D;"></button>
+    <button data-color="#6BCB77" style="background-color: #6BCB77;"></button>
+    <button data-color="#4D96FF" style="background-color: #4D96FF;"></button>
+    <button data-color="#9D4EDD" style="background-color: #9D4EDD;"></button>
+  </div>
 
 
   <script>
