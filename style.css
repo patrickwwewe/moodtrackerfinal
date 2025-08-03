@@ -27,7 +27,7 @@ Monatspalte(n)*/
 {
 width: 24 px; 
 height: 24px; 
-backround-color: #eee;
+background-color: #eee;
 border: 1px solid #aaa;
 cursor: pointer; /* zeigt an, dass es klickbar ist */
 
