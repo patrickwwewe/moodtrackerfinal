@@ -99,10 +99,12 @@
         tracker.style.display = "block";
         logoutBtn.style.display = "inline-block";
         loginBtn.style.display = "none";
+        renderCalendar(); // Kalender anzeigen
       } else {
         tracker.style.display = "none";
         logoutBtn.style.display = "none";
         loginBtn.style.display = "inline-block";
+        calendarEl.innerHTML = ""; // Kalender ausblenden!
       }
 
       // Zugriff auf das HTML-Element, in das wir das Kalender-Raster zeichnen
@@ -165,7 +167,7 @@ function renderCalendar() {
     calendarEl.appendChild(column);
   }
 }
-}
+
 
 /**
  * Zeigt die Farbauswahl direkt über dem geklickten Feld
@@ -202,7 +204,7 @@ colorPicker.addEventListener("click", (e) => {
 });
 
 // Starte den Kalenderaufbau direkt nach dem Laden
-renderCalendar();
+
     });
 
   </script>
