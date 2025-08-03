@@ -11,13 +11,14 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body>
+  <h1>Moodtracker – Farbkalender</h1>
   <div>
   <span id="username"></span>
   <button id="login-btn">Login mit Google</button>
   <button id="logout-btn" style="display:none;">Logout</button>
 </div>
 <div id="tracker" style="display:none;"></
-  <h1>Moodtracker – Farbkalender</h1>
+  
 <div id="calendar"></div>
 
 <div id="color-picker" class="hidden">
@@ -93,6 +94,7 @@ const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Se
  *  → für jeden Monat entsprechende Tageskästchen
  */
 function renderCalendar() {
+  calendarEl.innerHTML = ""; // Kalender leeren, bevor er neu erstellt wird (ansonsten dupliziert sich der Inhalt (grid))
   for (let month = 0; month < 12; month++) {
     // Neue Spalte (div) für den Monat
     const column = document.createElement("div");
