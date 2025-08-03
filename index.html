@@ -123,10 +123,13 @@ const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 // Für die Anzeige über jedem Monat
 const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
 
+//Anteige Array der Wochentagen
+const weekDays = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 /**
  * Funktion erstellt das ganze Kalender-Raster:
  *  → 12 Spalten für Monate
  *  → für jeden Monat entsprechende Tageskästchen
+ * hier werden die einzelnen tageszellen erstellt
  */
 function renderCalendar() {
   calendarEl.innerHTML = ""; // Kalender leeren, bevor er neu erstellt wird (ansonsten dupliziert sich der Inhalt (grid))
@@ -146,11 +149,21 @@ function renderCalendar() {
     for (let day = 1; day <= daysPerMonth[month]; day++) {
       const cell = document.createElement("div");
       cell.className = "day-cell";
+      // Datum-Objekt für diesen Tag erstellen
+const date = new Date(2025, month, day);
+      //Wochentag aus dem Array holen
+      const weekDay = weekDays[date.getDay()]; // getDay() gibt 0-6 zurück, damit holst du den Tag aus dem Array
 
       // Format YYYY-MM-DD – brauchen wir später für Firestore oder Speicherung
       const dateString = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       cell.dataset.date = dateString; // z. B. data-date="2025-02-01"
-
+      //Datum und Wochentag in die Zeile einfügen
+      cell.innerHTML = `
+        <div class="date-info">
+          <div class="date">${day}.</div>
+          <div class="weekday">${weekDay}</div>
+        </div>
+      `;
       // Wenn auf das Kästchen geklickt wird, wird die Farbauswahl angezeigt
       cell.addEventListener("click", () => {
         selectedDate = dateString;     // aktuell ausgewählter Tag merken
