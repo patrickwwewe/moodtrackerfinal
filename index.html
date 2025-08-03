@@ -127,9 +127,7 @@ const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Se
  */
 function renderCalendar() {
   // Wochentags-Abkürzungen
-  const weekdayNames = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]; //diese Variable enthält die Deutschen abkürzungen der Wochentage
-
-
+  const weekdayNames = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
   calendarEl.innerHTML = "";
   for (let month = 0; month < 12; month++) {
     const column = document.createElement("div");
@@ -167,39 +165,6 @@ function renderCalendar() {
     calendarEl.appendChild(column);
   }
 }
-  calendarEl.innerHTML = ""; // Kalender leeren, bevor er neu erstellt wird (ansonsten dupliziert sich der Inhalt (grid))
-  for (let month = 0; month < 12; month++) {
-    // Neue Spalte (div) für den Monat
-    const column = document.createElement("div");
-    column.className = "month-column";
-
-    // Monatstitel hinzufügen
-    const label = document.createElement("div");
-    label.textContent = monthNames[month];
-    label.style.textAlign = "center";
-    label.style.fontWeight = "bold";
-    column.appendChild(label); // z. B. "Jän"
-
-    // Für jeden Tag im aktuellen Monat
-    for (let day = 1; day <= daysPerMonth[month]; day++) {
-      const cell = document.createElement("div");
-      cell.className = "day-cell";
-
-      // Format YYYY-MM-DD – brauchen wir später für Firestore oder Speicherung
-      const dateString = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      cell.dataset.date = dateString; // z. B. data-date="2025-02-01"
-
-      // Wenn auf das Kästchen geklickt wird, wird die Farbauswahl angezeigt
-      cell.addEventListener("click", () => {
-        selectedDate = dateString;     // aktuell ausgewählter Tag merken
-        showColorPicker(cell);         // Popup über dem Feld anzeigen
-      });
-
-      column.appendChild(cell); // Tag zur Spalte hinzufügen
-    }
-
-    calendarEl.appendChild(column); // Monat zur Kalenderübersicht hinzufügen
-  }
 }
 
 /**
