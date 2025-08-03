@@ -97,10 +97,13 @@
       if (user) {
         username.textContent = `Angemeldet als: ${user.displayName}`;
         tracker.style.display = "block";
+        calendar.style.display = "grid";  // Kalender anzeigen
         logoutBtn.style.display = "inline-block";
         loginBtn.style.display = "none";
       } else {
+        username.textContent = "";
         tracker.style.display = "none";
+        calendar.style.display = "none";  // Kalender ausblenden
         logoutBtn.style.display = "none";
         loginBtn.style.display = "inline-block";
       }
