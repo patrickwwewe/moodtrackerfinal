@@ -78,7 +78,12 @@
     function initializeElements() {
       calendarEl = document.getElementById("calendar");
       colorPicker = document.getElementById("color-picker");
-      if (!calendarEl || !colorPicker) {
+      loginBtn = document.getElementById("login-btn");
+      logoutBtn = document.getElementById("logout-btn");
+      tracker = document.getElementById("tracker");
+      username = document.getElementById("username");
+      
+      if (!calendarEl || !colorPicker || !loginBtn || !logoutBtn || !tracker || !username) {
         console.error("Erforderliche DOM-Elemente nicht gefunden");
         return false;
       }
@@ -204,11 +209,11 @@
       }
     }
 
-    // 💻 DOM-Elemente
-    const loginBtn = document.getElementById("login-btn");
-    const logoutBtn = document.getElementById("logout-btn");
-    const tracker = document.getElementById("tracker");
-    const username = document.getElementById("username");
+    // Initialize DOM elements
+    if (!initializeElements()) {
+      console.error("Could not initialize DOM elements");
+      return;
+    }
 
     loginBtn.addEventListener("click", async () => {
   try {
@@ -376,7 +381,7 @@ colorPicker.addEventListener("click", (e) => {
 });
 
     });
-    }); // Ende des DOMContentLoaded Event Listeners
+     // Ende des DOMContentLoaded Event Listeners
 
   </script>
 </body>
