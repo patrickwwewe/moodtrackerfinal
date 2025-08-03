@@ -26,7 +26,7 @@ Monatspalte(n)*/
 .day-cell 
 {
 width: 24px; 
-height: 24px; 
+aspect-ratio: 1 / 1; /* Immer quadratisch */
 background-color: #eee;
 border: 1px solid #aaa;
 cursor: pointer; /* zeigt an, dass es klickbar ist */
