@@ -1,0 +1,34 @@
+/* Der Gesamte Kalenderbereich: Grid mit 12 Spalten
+(zwölf Monate) und die dazugehörigen Tage als Zeilen */
+
+#calendar 
+{ /*Container für das ganze Kalenderjahr*/
+    
+    display: grid;
+    grid-template-columns: repeat(12,1fr);/*12 gleich breite Spalten*/
+    gap: 4px; /*Abstand zzwischen den spalten*/
+    margin-top: 20px; /*platz nach oben*/
+}
+
+/* in jeder einzigen Monatspalte:...*/
+.month-column 
+{
+    display:flex;
+    flex-direction: column; /*Tage untereinadner*/
+    gap: 2px; /*abstand zwischen Tageskästchen*/
+    border: 1px solid #ccc;
+    padding: 4px;
+
+}
+
+/* EInzelnes Kästchen für jeden Tag in der(/den) 
+Monatspalte(n)*/
+.day-cell 
+{
+width: 24 px; 
+height: 24px; 
+backround-color: #eee;
+border: 1px solid #aaa;
+cursor: pointer; /* zeigt an, dass es klickbar ist */
+
+}

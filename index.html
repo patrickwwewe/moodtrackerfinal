@@ -11,25 +11,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <h1>Moodtracker</h1>
+  <h1>Moodtracker – Farbkalender</h1>
+<div id="calendar"></div>
 
-  <div id="auth"> 
-    <button id="login-btn">Login mit Google</button>
-    <button id="logout-btn" style="display:none;">Logout</button>
-  </div>
-
-  <div id="tracker" style="display:none;">
-    <p id="username"></p>
-    <div>
-      <label>Vormittag:</label>
-      <input type="text" id="emoji-morning" placeholder="🙂" />
-    </div>
-    <div>
-      <label>Abend:</label>
-      <input type="text" id="emoji-evening" placeholder="😴" />
-    </div>
-    <button id="save-btn">Speichern</button>
-  </div>
+<div id="color-picker" class="hidden">
+  <button data-color="#FF6B6B" style="background-color: #FF6B6B;"></button>
+  <button data-color="#FFD93D" style="background-color: #FFD93D;"></button>
+  <button data-color="#6BCB77" style="background-color: #6BCB77;"></button>
+  <button data-color="#4D96FF" style="background-color: #4D96FF;"></button>
+  <button data-color="#9D4EDD" style="background-color: #9D4EDD;"></button>
+</div
 
   <!-- ✅ Dein Firebase-Code ohne "import", funktioniert im Browser -->
   <script>
