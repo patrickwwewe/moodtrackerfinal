@@ -126,6 +126,47 @@ const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Se
  *  → für jeden Monat entsprechende Tageskästchen
  */
 function renderCalendar() {
+  // Wochentags-Abkürzungen
+  const weekdayNames = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]; //diese Variable enthält die Deutschen abkürzungen der Wochentage
+
+
+  calendarEl.innerHTML = "";
+  for (let month = 0; month < 12; month++) {
+    const column = document.createElement("div");
+    column.className = "month-column";
+
+    const label = document.createElement("div");
+    label.textContent = monthNames[month];
+    label.style.textAlign = "center";
+    label.style.fontWeight = "bold";
+    column.appendChild(label);
+
+    for (let day = 1; day <= daysPerMonth[month]; day++) {
+      const cell = document.createElement("div");
+      cell.className = "day-cell";
+
+      // Datum als String
+      const dateString = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      cell.dataset.date = dateString;
+
+      // Wochentag berechnen
+      const dateObj = new Date(`2025-${month + 1}-${day}`);
+      const weekday = weekdayNames[dateObj.getDay()];
+
+      // Inhalt: Tageszahl + Wochentag
+      cell.innerHTML = `<div style="font-size:0.9em;">${day}<br>${weekday}</div>`;
+
+      cell.addEventListener("click", () => {
+        selectedDate = dateString;
+        showColorPicker(cell);
+      });
+
+      column.appendChild(cell);
+    }
+
+    calendarEl.appendChild(column);
+  }
+}
   calendarEl.innerHTML = ""; // Kalender leeren, bevor er neu erstellt wird (ansonsten dupliziert sich der Inhalt (grid))
   for (let month = 0; month < 12; month++) {
     // Neue Spalte (div) für den Monat
