@@ -30,7 +30,24 @@ aspect-ratio: 1 / 1; /* Immer quadratisch */
 background-color: #eee;
 border: 1px solid #aaa;
 cursor: pointer; /* zeigt an, dass es klickbar ist */
+padding: 4px;
+}
 
+.date-info {
+  font-size: 0.8em;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.weekday {
+  font-weight: bold;
+}
+
+.date {
+  color: #666;
+  font-weight: bold;
 }
 
 /* Der Farbauswahl-Container (Popup) */
