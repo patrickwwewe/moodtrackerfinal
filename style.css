@@ -1,10 +1,7 @@
 /* Der Gesamte Kalenderbereich: Grid mit 12 Spalten
 (zwölf Monate) und die dazugehörigen Tage als Zeilen */
 
-#calendar 
-{ /*Container für das ganze Kalenderjahr*/
-    
-    display: grid;
+  #calendar {
     grid-template-columns: repeat(12,1fr);/*12 gleich breite Spalten*/
     gap: 4px; /*Abstand zzwischen den spalten*/
     margin-top: 20px; /*platz nach oben*/
