@@ -64,6 +64,84 @@
 
 
   <script>
+    // Konstanten für den Kalender
+    const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+    const weekDays = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+
+    // Globale Variablen
+    let calendarEl = null;
+    let colorPicker = null;
+    let selectedDate = null;
+
+    // Funktion zur Initialisierung der DOM-Elemente
+    function initializeElements() {
+      calendarEl = document.getElementById("calendar");
+      colorPicker = document.getElementById("color-picker");
+      if (!calendarEl || !colorPicker) {
+        console.error("Erforderliche DOM-Elemente nicht gefunden");
+        return false;
+      }
+      return true;
+    }
+
+    /**
+     * Funktion erstellt das ganze Kalender-Raster:
+     *  → 12 Spalten für Monate
+     *  → für jeden Monat entsprechende Tageskästchen
+     */
+    function renderCalendar() {
+      if (!calendarEl) return;
+      
+      calendarEl.innerHTML = ""; // Kalender leeren
+      for (let month = 0; month < 12; month++) {
+        const column = document.createElement("div");
+        column.className = "month-column";
+
+        const label = document.createElement("div");
+        label.textContent = monthNames[month];
+        label.style.textAlign = "center";
+        label.style.fontWeight = "bold";
+        column.appendChild(label);
+
+        for (let day = 1; day <= daysPerMonth[month]; day++) {
+          const cell = document.createElement("div");
+          cell.className = "day-cell";
+          const date = new Date(2025, month, day);
+          const weekDay = weekDays[date.getDay()];
+
+          const dateString = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          cell.dataset.date = dateString;
+          cell.innerHTML = `
+            <div class="date-info">
+              <span class="date">${day}.</span>
+              <span class="weekday">${weekDay}</span>
+            </div>
+          `;
+          
+          cell.addEventListener("click", () => {
+            selectedDate = dateString;
+            showColorPicker(cell);
+          });
+
+          column.appendChild(cell);
+        }
+        calendarEl.appendChild(column);
+      }
+    }
+
+    /**
+     * Zeigt die Farbauswahl direkt über dem geklickten Feld
+     */
+    function showColorPicker(targetCell) {
+      if (!colorPicker) return;
+      
+      colorPicker.classList.remove("hidden");
+      const rect = targetCell.getBoundingClientRect();
+      colorPicker.style.top = `${rect.top + window.scrollY - 40}px`;
+      colorPicker.style.left = `${rect.left + rect.width / 2}px`;
+    }
+
     // Warte bis das DOM geladen ist
     document.addEventListener('DOMContentLoaded', function() {
     // 🔧 Firebase-Konfiguration
@@ -132,12 +210,41 @@
     const tracker = document.getElementById("tracker");
     const username = document.getElementById("username");
 
-    loginBtn.addEventListener("click", () => {
-      auth.signInWithPopup(provider).catch(console.error);
-    });
+    loginBtn.addEventListener("click", async () => {
+  try {
+    // Disable the button while authenticating
+
+    loginBtn.disabled = true;
+    await auth.signInWithPopup(provider);
+  } catch (error) {
+    if (error.code === 'auth/popup-blocked') {
+      alert('Please allow popups for this website to login');
+    } else if (error.code === 'auth/cancelled-popup-request') {
+      // This is normal when multiple popups are attempted, just ignore
+    } else {
+      console.error("Login error:", error);
+    }
+  } finally {
+    loginBtn.disabled = false;
+  }
+});
 
     logoutBtn.addEventListener("click", () => {
       auth.signOut().catch(console.error);
+    });
+
+    // Color picker click handler
+    colorPicker.addEventListener("click", (e) => {
+      if (e.target.dataset.color && selectedDate) {
+        const color = e.target.dataset.color;
+        const targetCell = document.querySelector(`[data-date="${selectedDate}"]`);
+        if (targetCell) {
+          targetCell.style.backgroundColor = color;
+          saveMood(selectedDate, color);
+        }
+        colorPicker.classList.add("hidden");
+        selectedDate = null;
+      }
     });
 
     auth.onAuthStateChanged(user => {
@@ -165,15 +272,12 @@
         loginBtn.style.display = "inline-block";
       }
 
-      // Konstanten für den Kalender
-const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
-const weekDays = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
-
-// Globale Variablen
-let calendarEl;
-let colorPicker;
-let selectedDate = null;
+    });
+  
+    // Konstanten für den Kalender
+    const daysPerMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+    const weekDays = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
 // Funktion zur Initialisierung der DOM-Elemente
 function initializeElements() {
